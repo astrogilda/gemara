@@ -1,0 +1,61 @@
+metadata:
+  id: audit-log-002
+  type: AuditLog
+  gemara-version: "1.1.0"
+  version: "1.0.0"
+  description: "Evidence collector missing its required Entity type"
+  author:
+    id: lead-auditor
+    name: "Jane Auditor"
+    type: Human
+  mapping-references:
+    - id: OSPS
+      title: "Open Source Project Security Baseline"
+      version: "2025.1"
+      url: "https://baseline.openssf.org"
+    - id: eval-log
+      title: "PVTR Evaluation Log"
+      version: "2025-08-22"
+      url: "https://artifacts.example.com/eval-logs/pvtr-baseline-scan.yaml"
+
+target:
+  id: gemara-repo
+  name: "gemaraproj/gemara"
+  type: Software
+  uri: "https://github.com/gemaraproj/gemara"
+
+owner:
+  responsible:
+    - name: "Jane Auditor"
+      affiliation: "External Audit Firm"
+  accountable:
+    - name: "Project Lead"
+      affiliation: "OpenSSF"
+
+summary: "One evidence entry names a collector that is not a well-formed Actor."
+
+criteria:
+  - reference-id: OSPS
+    remarks: "Baseline whose controls each result is scored against."
+
+results:
+  - id: AR-DO-01
+    title: "User documentation missing"
+    type: Gap
+    description: "No user guide is published or referenced in the Security Insights data."
+    criteria-reference:
+      reference-id: OSPS
+      entries:
+        - reference-id: OSPS-DO-01
+    evidence:
+      - id: EV-DO-01
+        type: EvaluationLog
+        description: "PVTR evaluation results for documentation controls"
+        collected-at: "2025-08-22T16:02:00Z"
+        method: TEST
+        collector:
+          id: pvtr
+          name: "Privateer"
+        source:
+          reference-id: eval-log
+          entry-id: "assessment-do-01"

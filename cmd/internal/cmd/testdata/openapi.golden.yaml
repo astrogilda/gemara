@@ -223,6 +223,14 @@ components:
         message:
           description: Message provides additional context about the assessment result.
           type: string
+        method:
+          allOf:
+          - $ref: "#/components/schemas/EntryMapping"
+          description: |-
+            Method references the AcceptedMethod entry within that plan which produced this
+            result, mirroring ActionResult.method on the enforcement layer. Two logs against
+            one plan, one automated and one from a manual review, are otherwise
+            distinguishable only by reading prose.
         plan:
           allOf:
           - $ref: "#/components/schemas/EntryMapping"
@@ -934,12 +942,26 @@ components:
           allOf:
           - $ref: "#/components/schemas/Datetime"
           description: collected-at is the timestamp when the evidence was gathered
+        collector:
+          allOf:
+          - $ref: "#/components/schemas/Actor"
+          description: |-
+            collector identifies who or what gathered this evidence, as distinct from
+            whoever produced the payload. When absent, the artifact's metadata.author is
+            the collector.
         description:
           description: description explains what this evidence represents
           type: string
         id:
           description: id uniquely identifies this evidence
           type: string
+        method:
+          allOf:
+          - $ref: "#/components/schemas/EvidenceMethod"
+          description: |-
+            method records how this evidence was obtained, as distinct from where it came
+            from. OSCAL requires a method on Observation, so a converter with no source for
+            it has to infer one.
         payload:
           description: payload is the raw evidence data collected inline
         source:
@@ -987,6 +1009,18 @@ components:
       - reference-id
       type: object
       x-status: stable
+    EvidenceMethod:
+      anyOf:
+      - enum:
+        - EXAMINE
+        - INTERVIEW
+        - TEST
+        - INTERCEPTED
+        - RECONSTRUCTED
+      - {}
+      description: "EvidenceMethod records how evidence was obtained. It is an open enum for the same\nreason #EvidenceType is: the three OSCAL assessment methods are the recommended\nvalues, and a collection route OSCAL has no term for still needs somewhere to go.\n\n\tEXAMINE        a reviewer read an artifact or a configuration.\n\tINTERVIEW      a person was asked.\n\tTEST           a procedure ran against the subject and its output was recorded.\n\tINTERCEPTED    a boundary the subject cannot address recorded the value as it crossed.\n\tRECONSTRUCTED  the value was derived afterwards by comparing two observations.\n\nThe last two carry a distinction the first three cannot: TEST covers both a probe\nrun at the time and a difference taken afterwards, and only the first can see a\ncondition that was raised and undone between the two states compared."
+      type: string
+      x-status: experimental
     EvidenceType:
       anyOf:
       - enum:

@@ -95,6 +95,16 @@ import "list"
 	// source identifies the artifact or system from which this evidence was collected
 	source?: #EvidenceMapping @go(Source)
 
+	// method records how this evidence was obtained, as distinct from where it came
+	// from. OSCAL requires a method on Observation, so a converter with no source for
+	// it has to infer one.
+	method?: #EvidenceMethod @go(Method)
+
+	// collector identifies who or what gathered this evidence, as distinct from
+	// whoever produced the payload. When absent, the artifact's metadata.author is
+	// the collector.
+	collector?: #Actor @go(Collector)
+
 	// description explains what this evidence represents
 	description?: string
 }
@@ -113,3 +123,18 @@ import "list"
 // recommended values include artifact types already known to Gemara (e.g.
 // EvaluationLog, EnforcementLog) plus categories for common evidence forms.
 #EvidenceType: #ArtifactType | string @go(-)
+
+// EvidenceMethod records how evidence was obtained. It is an open enum for the same
+// reason #EvidenceType is: the three OSCAL assessment methods are the recommended
+// values, and a collection route OSCAL has no term for still needs somewhere to go.
+//
+//	EXAMINE        a reviewer read an artifact or a configuration.
+//	INTERVIEW      a person was asked.
+//	TEST           a procedure ran against the subject and its output was recorded.
+//	INTERCEPTED    a boundary the subject cannot address recorded the value as it crossed.
+//	RECONSTRUCTED  the value was derived afterwards by comparing two observations.
+//
+// The last two carry a distinction the first three cannot: TEST covers both a probe
+// run at the time and a difference taken afterwards, and only the first can see a
+// condition that was raised and undone between the two states compared.
+#EvidenceMethod: "EXAMINE" | "INTERVIEW" | "TEST" | "INTERCEPTED" | "RECONSTRUCTED" | string @go(-)

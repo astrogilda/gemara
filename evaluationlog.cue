@@ -47,6 +47,11 @@ package gemara
 	requirement: #EntryMapping
 	// Plan maps to the policy assessment plan being executed.
 	plan?: #EntryMapping @go(Plan,optional=nillable)
+	// Method references the AcceptedMethod entry within that plan which produced this
+	// result, mirroring ActionResult.method on the enforcement layer. Two logs against
+	// one plan, one automated and one from a manual review, are otherwise
+	// distinguishable only by reading prose.
+	method?: #EntryMapping @go(Method,optional=nillable)
 	// Description provides a summary of the assessment procedure.
 	description: string
 	// Result is the overall outcome of the assessment procedure, matching the result of the last step that was run.
