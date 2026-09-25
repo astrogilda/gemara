@@ -1,5 +1,5 @@
 metadata:
-  id: "multi-source-policy-001"
+  id: "multi-source-policy-unanimous"
   type: Policy
   gemara-version: "1.1.0"
   description: "Policy exercising multi-source evaluation of one assessment requirement"
@@ -53,13 +53,12 @@ adherence:
     - id: "AP-BUILD-PROV-01"
       requirement-id: "OSPS-BR-01"
       frequency: "per-release"
-      conflict-resolution: "highest-rank"
+      conflict-resolution: "unanimous"
       evaluation-methods:
         - id: "EV-SCANNER-A"
           type: "Behavioral"
           mode: "Automated"
           required: true
-          rank: 1
           executor:
             id: "scanner-a"
             name: "Scanner A"
@@ -67,7 +66,6 @@ adherence:
         - id: "EV-SCANNER-B"
           type: "Behavioral"
           mode: "Automated"
-          rank: 2
           executor:
             id: "scanner-b"
             name: "Scanner B"
